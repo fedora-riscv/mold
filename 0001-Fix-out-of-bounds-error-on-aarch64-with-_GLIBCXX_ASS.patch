@@ -1,0 +1,42 @@
+From 03ba8f93255055adaf69984c17bcfea3b22340db Mon Sep 17 00:00:00 2001
+Message-Id: <03ba8f93255055adaf69984c17bcfea3b22340db.1642970958.git.github@sicherha.de>
+From: Christoph Erhardt <github@sicherha.de>
+Date: Sun, 23 Jan 2022 21:42:21 +0100
+Subject: [PATCH] Fix out-of-bounds error on aarch64 with `_GLIBCXX_ASSERTIONS`
+ enabled
+
+While an iterator may point beyond the last element of a `std::span`, a
+pointer may not.
+
+Fixes #298.
+
+Signed-off-by: Christoph Erhardt <github@sicherha.de>
+---
+ elf/arch-arm64.cc | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/elf/arch-arm64.cc b/elf/arch-arm64.cc
+index aba86330..c608ae49 100644
+--- a/elf/arch-arm64.cc
++++ b/elf/arch-arm64.cc
+@@ -574,7 +574,7 @@ static void create_thunks(Context<E> &ctx, OutputSection<E> &osec) {
+     thunk.offset = offset;
+ 
+     // Scan relocations between B and C to collect symbols that need thunks.
+-    tbb::parallel_for_each(&members[b], &members[c], [&](InputSection<E> *isec) {
++    tbb::parallel_for_each(members.begin() + b, members.begin() + c, [&](InputSection<E> *isec) {
+       std::span<ElfRel<E>> rels = isec->get_rels(ctx);
+       isec->range_extn.resize(rels.size());
+ 
+@@ -619,7 +619,7 @@ static void create_thunks(Context<E> &ctx, OutputSection<E> &osec) {
+     }
+ 
+     // Scan relocations again to fix symbol offsets in the last thunk.
+-    tbb::parallel_for_each(&members[b], &members[c], [&](InputSection<E> *isec) {
++    tbb::parallel_for_each(members.begin() + b, members.begin() + c, [&](InputSection<E> *isec) {
+       std::span<ElfRel<E>> rels = isec->get_rels(ctx);
+ 
+       for (i64 i = 0; i < rels.size(); i++) {
+-- 
+2.34.1
+
