@@ -36,9 +36,6 @@ BuildRequires:	gcc-toolset-10-toolchain
 %if 0%{!?el7} && 0%{!?el8}
 BuildRequires:	gcc-c++ >= 10
 %endif
-%if 0%{?fedora}
-BuildRequires:	libdwarf-tools
-%endif
 BuildRequires:	mimalloc-devel
 BuildRequires:	openssl-devel
 BuildRequires:	xxhash-devel
@@ -49,6 +46,9 @@ BuildRequires:	clang
 BuildRequires:	glibc-static
 %ifarch x86_64
 BuildRequires:	glibc-static(x86-32)
+%endif
+%if 0%{?fedora}
+BuildRequires:	libdwarf-tools
 %endif
 BuildRequires:	libstdc++-static
 
