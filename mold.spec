@@ -22,8 +22,8 @@ Patch1:		bundled_lib_system_flags.patch
 # Fix for failed assertion on aarch64
 Patch2:		0001-Fix-out-of-bounds-error-on-aarch64-with-_GLIBCXX_ASS.patch
 
-# mold can currently produce native binaries for these architectures only
-ExclusiveArch:	x86_64 %{ix86} aarch64
+# mold can currently produce native binaries for x86 and aarch64 only
+ExclusiveArch:	x86_64 aarch64
 
 BuildRequires:	cmake
 BuildRequires:	gcc
