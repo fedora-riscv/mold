@@ -45,7 +45,7 @@ BuildRequires:	zlib-devel
 BuildRequires:	clang
 BuildRequires:	glibc-static
 %ifarch x86_64
-BuildRequires:	glibc-static(x86-32)
+BuildRequires:	/usr/lib/libc.a
 %endif
 %if 0%{?fedora}
 BuildRequires:	libdwarf-tools
