@@ -1,6 +1,6 @@
 Name:		mold
 Version:	1.0.2
-Release:	1%{?dist}
+Release:	2%{?dist}
 Summary:	A Modern Linker
 
 License:	AGPLv3+
@@ -118,6 +118,9 @@ fi
 %{_mandir}/man1/mold.1*
 
 %changelog
+* Thu Feb 17 2022 Christoph Erhardt <fedora@sicherha.de> - 1.0.2-2
+- Rebuild due to mimalloc soname change
+
 * Sun Jan 23 2022 Christoph Erhardt <fedora@sicherha.de> - 1.0.2-1
 - Bump version to 1.0.2.
 
