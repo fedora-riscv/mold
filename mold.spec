@@ -26,7 +26,6 @@ Patch2:		0001-Fix-out-of-bounds-error-on-aarch64-with-_GLIBCXX_ASS.patch
 ExclusiveArch:	x86_64 aarch64
 
 BuildRequires:	cmake
-BuildRequires:	gcc
 %if 0%{?el7}
 BuildRequires:	devtoolset-10-toolchain
 %endif
@@ -34,6 +33,7 @@ BuildRequires:	devtoolset-10-toolchain
 BuildRequires:	gcc-toolset-10-toolchain
 %endif
 %if 0%{!?el7} && 0%{!?el8}
+BuildRequires:	gcc
 BuildRequires:	gcc-c++ >= 10
 %endif
 BuildRequires:	mimalloc-devel
