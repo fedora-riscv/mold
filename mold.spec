@@ -62,10 +62,10 @@ Provides:	bundled(tbb) = 2021.3
 %define build_args PREFIX=%{_prefix} LIBDIR=%{_libdir} CC=gcc CXX=g++ CFLAGS="%{build_cflags}" CXXFLAGS="%{build_cxxflags}" LDFLAGS="%{build_ldflags}" STRIP=echo SYSTEM_MIMALLOC=1 SYSTEM_XXHASH=1
 
 %description
-mold is a multi-threaded, high-performance linker that is several times faster
-than the industry-standard ones, namely, GNU ld, GNU gold or LLVM lld. It is
-developed as a drop-in replacement for these linkers and command-line compatible
-with them with a few exceptions.
+mold is a faster drop-in replacement for existing Unix linkers.
+It is several times faster than the LLVM lld linker.
+mold is designed to increase developer productivity by reducing
+build time, especially in rapid debug-edit-rebuild cycles.
 
 %prep
 %autosetup -p1
