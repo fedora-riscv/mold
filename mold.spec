@@ -1,6 +1,6 @@
 Name:		mold
-Version:	1.0.2
-Release:	2%{?dist}
+Version:	1.1
+Release:	1%{?dist}
 Summary:	A Modern Linker
 
 License:	AGPLv3+
@@ -14,16 +14,15 @@ Source0:	%{url}/archive/v%{version}/%{name}-%{version}.tar.gz
 # in the Fedora tbb package)
 Patch0:		tbb-strip-werror.patch
 
-# Pass the system's CXXFLAGS and CFLAGS to the bundled libraries to ensure they
-# are built with all the Fedora hardening flags and with PIE (otherwise the
-# linker errors linking non-PIE code with PIE code).
-Patch1:		bundled_lib_system_flags.patch
+# Skip failing test on aarch64
+Patch1:		0001-Skip-reloc-rodata-test-on-aarch64.patch
 
-# Fix for failed assertion on aarch64
-Patch2:		0001-Fix-out-of-bounds-error-on-aarch64-with-_GLIBCXX_ASS.patch
+# Fix mimalloc compatibility with libstdc++ < 9:
+# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=68210
+Patch2: 0002-Fix-compatibility-with-libstdc-9.patch
 
-# mold can currently produce native binaries for x86 and aarch64 only
-ExclusiveArch:	x86_64 aarch64
+# mold can currently produce native binaries for x86, aarch64 and riscv64 only
+ExclusiveArch:	x86_64 aarch64 riscv64
 
 BuildRequires:	cmake
 %if 0%{?el7}
@@ -59,7 +58,7 @@ Requires(preun): %{_sbindir}/alternatives
 # https://bugzilla.redhat.com/show_bug.cgi?id=2036372
 Provides:	bundled(tbb) = 2021.3
 
-%define build_args PREFIX=%{_prefix} LIBDIR=%{_libdir} CC=gcc CXX=g++ CFLAGS="%{build_cflags}" CXXFLAGS="%{build_cxxflags}" LDFLAGS="%{build_ldflags}" STRIP=echo SYSTEM_MIMALLOC=1 SYSTEM_XXHASH=1
+%define build_args PREFIX=%{_prefix} LIBDIR=%{_libdir} CC=gcc CXX=g++ CFLAGS="%{build_cflags}" CXXFLAGS="%{build_cxxflags}" LDFLAGS="%{build_ldflags}" STRIP=echo SYSTEM_MIMALLOC=1
 
 %description
 mold is a faster drop-in replacement for existing Unix linkers.
@@ -118,6 +117,11 @@ fi
 %{_mandir}/man1/mold.1*
 
 %changelog
+* Mon Feb 21 2022 Christoph Erhardt <fedora@sicherha.de> - 1.1-1
+- Bump version to 1.1
+- Drop upstreamed patches
+- Update description
+
 * Thu Feb 17 2022 Christoph Erhardt <fedora@sicherha.de> - 1.0.2-2
 - Rebuild due to mimalloc soname change
 
