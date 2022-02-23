@@ -102,7 +102,7 @@ fi
 %if 0%{?el8}
 . /opt/rh/gcc-toolset-10/enable
 %endif
-%make_build %{build_args} test
+%make_build -j1 %{build_args} test
 
 %files
 %license LICENSE
