@@ -21,9 +21,6 @@ Patch1:		0001-Skip-reloc-rodata-test-on-aarch64.patch
 # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=68210
 Patch2: 0002-Fix-compatibility-with-libstdc-9.patch
 
-# Fix unit test on i686
-Patch3: 0003-Fix-dynamic-unit-test-on-i686.patch
-
 # mold can currently produce native binaries for these architectures only
 ExclusiveArch:	%{ix86} x86_64 aarch64 riscv64
 
