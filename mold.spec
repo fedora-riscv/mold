@@ -19,7 +19,7 @@ Patch1:		0001-Skip-reloc-rodata-test-on-aarch64.patch
 
 # Fix mimalloc compatibility with libstdc++ < 9:
 # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=68210
-Patch2: 0002-Fix-compatibility-with-libstdc-9.patch
+Patch2:		0002-Fix-compatibility-with-libstdc-9.patch
 
 # mold can currently produce native binaries for x86, aarch64 and riscv64 only
 ExclusiveArch:	x86_64 aarch64 riscv64
