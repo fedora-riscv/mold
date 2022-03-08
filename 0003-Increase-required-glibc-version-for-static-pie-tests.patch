@@ -1,0 +1,44 @@
+From a20e3b8004c30e9edaeafaccb194ff077c3da98f Mon Sep 17 00:00:00 2001
+Message-Id: <a20e3b8004c30e9edaeafaccb194ff077c3da98f.1646731932.git.github@sicherha.de>
+From: Christoph Erhardt <github@sicherha.de>
+Date: Tue, 8 Mar 2022 10:13:49 +0100
+Subject: [PATCH] Increase required glibc version for `-static-pie` tests
+
+mold 1.1.1 generates `-static-pie` code that works with glibc 2.35 but
+segfaults with glibc 2.34 or older.
+
+Signed-off-by: Christoph Erhardt <github@sicherha.de>
+---
+ test/elf/hello-static-pie.sh | 2 +-
+ test/elf/ifunc-static-pie.sh | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/test/elf/hello-static-pie.sh b/test/elf/hello-static-pie.sh
+index 4b72d1c3..18700913 100755
+--- a/test/elf/hello-static-pie.sh
++++ b/test/elf/hello-static-pie.sh
+@@ -18,7 +18,7 @@ echo 'int main() {}' | $CC -o $t/exe -xc -
+ ldd $t/exe | grep -q ld-musl && { echo OK; exit; }
+ 
+ # -static-pie works only with a newer version of glibc
+-ldd --version | grep -Pq 'Copyright \(C\) 202[1-9]' || { echo skipped; exit; }
++ldd --version | grep -Pq 'Copyright \(C\) 202[2-9]' || { echo skipped; exit; }
+ 
+ cat <<EOF | $CC -o $t/a.o -c -xc - -fPIE
+ #include <stdio.h>
+diff --git a/test/elf/ifunc-static-pie.sh b/test/elf/ifunc-static-pie.sh
+index a8d8785b..53a1c919 100755
+--- a/test/elf/ifunc-static-pie.sh
++++ b/test/elf/ifunc-static-pie.sh
+@@ -18,7 +18,7 @@ echo 'int main() {}' | $CC -o $t/exe -xc -
+ ldd $t/exe | grep -q ld-musl && { echo OK; exit; }
+ 
+ # -static-pie works only with a newer version of glibc
+-ldd --version | grep -Pq 'Copyright \(C\) 202[1-9]' || { echo skipped; exit; }
++ldd --version | grep -Pq 'Copyright \(C\) 202[2-9]' || { echo skipped; exit; }
+ 
+ cat <<EOF | $CC -o $t/a.o -c -xc - -fPIC
+ #include <stdio.h>
+-- 
+2.35.1
+

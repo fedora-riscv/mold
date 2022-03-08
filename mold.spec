@@ -1,5 +1,5 @@
 Name:		mold
-Version:	1.1
+Version:	1.1.1
 Release:	1%{?dist}
 Summary:	A Modern Linker
 
@@ -14,12 +14,15 @@ Source0:	%{url}/archive/v%{version}/%{name}-%{version}.tar.gz
 # in the Fedora tbb package)
 Patch0:		tbb-strip-werror.patch
 
-# Skip failing test on aarch64
-Patch1:		0001-Skip-reloc-rodata-test-on-aarch64.patch
+# Skip failing tests on aarch64
+Patch1:		0001-Skip-failing-tests-on-aarch64.patch
 
 # Fix mimalloc compatibility with libstdc++ < 9:
 # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=68210
 Patch2:		0002-Fix-compatibility-with-libstdc-9.patch
+
+# Disable `-static-pie` tests for systems with glibc < 2.35
+Patch3:		0003-Increase-required-glibc-version-for-static-pie-tests.patch
 
 # mold can currently produce native binaries for x86, aarch64 and riscv64 only
 ExclusiveArch:	x86_64 aarch64 riscv64
@@ -50,6 +53,8 @@ BuildRequires:	/usr/lib/libc.a
 BuildRequires:	libdwarf-tools
 %endif
 BuildRequires:	libstdc++-static
+BuildRequires:	llvm
+BuildRequires:	perl
 
 Requires(post): %{_sbindir}/alternatives
 Requires(preun): %{_sbindir}/alternatives
@@ -117,6 +122,9 @@ fi
 %{_mandir}/man1/mold.1*
 
 %changelog
+* Tue Mar 08 2022 Christoph Erhardt <fedora@sicherha.de> - 1.1.1-1
+- Bump version to 1.1.1
+
 * Mon Feb 21 2022 Christoph Erhardt <fedora@sicherha.de> - 1.1-1
 - Bump version to 1.1
 - Drop upstreamed patches
