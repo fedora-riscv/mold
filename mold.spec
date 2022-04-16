@@ -28,13 +28,9 @@ Patch3:		0003-Increase-required-glibc-version-for-static-pie-tests.patch
 ExclusiveArch:	x86_64 aarch64 riscv64
 
 BuildRequires:	cmake
-%if 0%{?el7}
-BuildRequires:	devtoolset-10-toolchain
-%endif
 %if 0%{?el8}
 BuildRequires:	gcc-toolset-10-toolchain
-%endif
-%if 0%{!?el7} && 0%{!?el8}
+%else
 BuildRequires:	gcc
 BuildRequires:	gcc-c++ >= 10
 %endif
@@ -76,9 +72,6 @@ build time, especially in rapid debug-edit-rebuild cycles.
 rm -r third-party/{mimalloc,xxhash}
 
 %build
-%if 0%{?el7}
-. /opt/rh/devtoolset-10/enable
-%endif
 %if 0%{?el8}
 . /opt/rh/gcc-toolset-10/enable
 %endif
@@ -101,9 +94,6 @@ if [ "$1" = 0 ]; then
 fi
 
 %check
-%if 0%{?el7}
-. /opt/rh/devtoolset-10/enable
-%endif
 %if 0%{?el8}
 . /opt/rh/gcc-toolset-10/enable
 %endif
