@@ -1,0 +1,29 @@
+From 133946af0c4013d17715cad486a1984848732a4d Mon Sep 17 00:00:00 2001
+Message-Id: <133946af0c4013d17715cad486a1984848732a4d.1650116695.git.github@sicherha.de>
+From: Christoph Erhardt <github@sicherha.de>
+Date: Fri, 15 Apr 2022 20:34:04 +0200
+Subject: [PATCH] Skip test if `dwarfdump` is unavailable
+
+Fixes #430.
+
+Signed-off-by: Christoph Erhardt <github@sicherha.de>
+---
+ test/elf/dead-debug-sections.sh | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/test/elf/dead-debug-sections.sh b/test/elf/dead-debug-sections.sh
+index 5573b3a2..b31fcb34 100755
+--- a/test/elf/dead-debug-sections.sh
++++ b/test/elf/dead-debug-sections.sh
+@@ -14,6 +14,8 @@ mold="$(pwd)/mold"
+ t=out/test/elf/$testname
+ mkdir -p $t
+ 
++which dwarfdump >& /dev/null || { echo skipped; exit; }
++
+ cat <<EOF | $CXX -c -o $t/a.o -g -xc++ -
+ #include <iostream>
+ struct Foo {
+-- 
+2.35.1
+

@@ -1,5 +1,5 @@
 Name:		mold
-Version:	1.1.1
+Version:	1.2
 Release:	1%{?dist}
 Summary:	A Modern Linker
 
@@ -14,17 +14,15 @@ Source0:	%{url}/archive/v%{version}/%{name}-%{version}.tar.gz
 # in the Fedora tbb package)
 Patch0:		tbb-strip-werror.patch
 
-# Skip failing tests on aarch64
-Patch1:		0001-Skip-failing-tests-on-aarch64.patch
+# Skip test if dwarfdump is unavailable
+Patch1:		0001-Skip-test-if-dwarfdump-is-unavailable.patch
 
 # Fix mimalloc compatibility with libstdc++ < 9:
 # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=68210
 Patch2:		0002-Fix-compatibility-with-libstdc-9.patch
 
-# Disable `-static-pie` tests for systems with glibc < 2.35
-Patch3:		0003-Increase-required-glibc-version-for-static-pie-tests.patch
-
-# mold can currently produce native binaries for x86, aarch64 and riscv64 only
+# mold can produce native binaries for i686, x86_64, ARMv7, aarch64 and riscv64,
+# but it only runs on a 64-bit host
 ExclusiveArch:	x86_64 aarch64 riscv64
 
 BuildRequires:	cmake
@@ -70,6 +68,8 @@ build time, especially in rapid debug-edit-rebuild cycles.
 %prep
 %autosetup -p1
 rm -r third-party/{mimalloc,xxhash}
+# Remove failing unit test for now (https://github.com/rui314/mold/issues/436)
+rm test/elf/gdb-index.sh
 
 %build
 %if 0%{?el8}
@@ -112,6 +112,12 @@ fi
 %{_mandir}/man1/mold.1*
 
 %changelog
+* Sat Apr 16 2022 Christoph Erhardt <fedora@sicherha.de> - 1.2-1
+- Bump version to 1.2
+- Drop upstreamed patches
+- Set correct version of bundled tbb
+- Suppress 'comparison between signed and unsigned' warnings
+
 * Tue Mar 08 2022 Christoph Erhardt <fedora@sicherha.de> - 1.1.1-1
 - Bump version to 1.1.1
 
