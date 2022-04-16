@@ -1,5 +1,5 @@
-From 705cbd8cbbfed2ee4416c0567217f7ef42ced443 Mon Sep 17 00:00:00 2001
-Message-Id: <705cbd8cbbfed2ee4416c0567217f7ef42ced443.1645562924.git.github@sicherha.de>
+From d068fb0caae8c8db97ee59ba400929f5f97f8be1 Mon Sep 17 00:00:00 2001
+Message-Id: <d068fb0caae8c8db97ee59ba400929f5f97f8be1.1650123861.git.github@sicherha.de>
 From: Christoph Erhardt <github@sicherha.de>
 Date: Tue, 22 Feb 2022 21:21:18 +0100
 Subject: [PATCH] Fix compatibility with libstdc++ < 9
@@ -14,22 +14,24 @@ Upstream bug: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=68210
 This patch ensures that the `nothrow` `delete` operators are overridden
 as well.
 ---
- main.cc | 5 +++++
- 1 file changed, 5 insertions(+)
+ main.cc | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
 diff --git a/main.cc b/main.cc
-index b390b0f7..2aea03a0 100644
+index b390b0f7..5c1f5450 100644
 --- a/main.cc
 +++ b/main.cc
-@@ -6,6 +6,11 @@
+@@ -6,6 +6,13 @@
  
  #ifdef USE_SYSTEM_MIMALLOC
  #include <mimalloc-new-delete.h>
 +
 +// Additionally override the nothrow delete operators for compatibility with
 +// buggy libstdc++ < 9
++#if MI_MALLOC_VERSION < 206
 +void operator delete(void* p, const std::nothrow_t&) noexcept   { mi_free(p); }
 +void operator delete[](void* p, const std::nothrow_t&) noexcept { mi_free(p); }
++#endif
  #endif
  
  namespace mold {
