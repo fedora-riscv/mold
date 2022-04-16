@@ -57,7 +57,7 @@ Requires(preun): %{_sbindir}/alternatives
 
 # API-incompatible with older tbb 2020.3 currently shipped by Fedora:
 # https://bugzilla.redhat.com/show_bug.cgi?id=2036372
-Provides:	bundled(tbb) = 2021.3
+Provides:	bundled(tbb) = 2021.5
 
 %define build_args PREFIX=%{_prefix} LIBDIR=%{_libdir} CFLAGS="%{build_cflags}" CXXFLAGS="%{build_cxxflags} -Wno-sign-compare" LDFLAGS="%{build_ldflags}" STRIP=echo SYSTEM_MIMALLOC=1
 
