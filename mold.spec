@@ -45,7 +45,7 @@ BuildRequires:	glibc-static
 %ifarch x86_64
 BuildRequires:	/usr/lib/libc.a
 %endif
-%if 0%{?fedora}
+%if 0%{!?el8}
 BuildRequires:	libdwarf-tools
 %endif
 BuildRequires:	libstdc++-static
