@@ -40,9 +40,6 @@ BuildRequires:	zlib-devel
 # The following packages are only required for executing the tests
 BuildRequires:	clang
 BuildRequires:	glibc-static
-%ifarch x86_64
-BuildRequires:	/usr/lib/libc.a
-%endif
 %if ! 0%{?el8}
 BuildRequires:	libdwarf-tools
 %endif
