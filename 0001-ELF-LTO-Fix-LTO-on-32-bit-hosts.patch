@@ -1,0 +1,41 @@
+From 339ce3afe5ebbcc924df431153a0b8fc549b9dd8 Mon Sep 17 00:00:00 2001
+Message-Id: <339ce3afe5ebbcc924df431153a0b8fc549b9dd8.1651330992.git.github@sicherha.de>
+From: Rui Ueyama <ruiu@cs.stanford.edu>
+Date: Sat, 30 Apr 2022 12:06:39 +0800
+Subject: [PATCH 1/3] [ELF][LTO] Fix LTO on 32-bit hosts
+
+`off_t` is either an alias for `off32_t` or for `off64_t` on a 32-bit
+machine. `off32_t` is the default. But it looks like LLVM gold plugin
+is always compiled with `off64_t`.
+
+Because of this difference, the offset of the `handle` member in
+`PluginInputFile` differed between mold and LLVMgold.so. mold thought
+that the member was at offset 16 of the struct, while LLVMgold.so
+thought that it's at offset 24.
+
+That caused a mysterious crash when LLVMgold tries to access the
+`handle` member.
+
+Fixes https://github.com/rui314/mold/issues/483
+---
+ lto.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/lto.h b/lto.h
+index c7a73698..03ab340f 100644
+--- a/lto.h
++++ b/lto.h
+@@ -73,8 +73,8 @@ enum PluginOutputFileType {
+ struct PluginInputFile {
+   const char *name;
+   int fd;
+-  off_t offset;
+-  off_t filesize;
++  uint64_t offset;
++  uint64_t filesize;
+   void *handle;
+ };
+ 
+-- 
+2.35.1
+

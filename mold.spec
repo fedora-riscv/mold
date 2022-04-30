@@ -14,9 +14,15 @@ Source0:	%{url}/archive/v%{version}/%{name}-%{version}.tar.gz
 # in the Fedora tbb package)
 Patch0:		tbb-strip-werror.patch
 
-# mold can produce native binaries for i686, x86_64, ARMv7, aarch64 and riscv64,
-# but it only runs on a 64-bit host
-ExclusiveArch:	x86_64 aarch64 riscv64
+# Fix LTO on 32-bit hosts
+Patch1:		0001-ELF-LTO-Fix-LTO-on-32-bit-hosts.patch
+
+# Skip failing tests on i686 and armv7l
+Patch2:		0002-Skip-static-pie-tests-on-i686-not-just-on-i386.patch
+Patch3:		0003-Skip-tests-that-fail-on-i686-and-armv7l.patch
+
+# mold can currently produce native binaries for these architectures only
+ExclusiveArch:	%{ix86} x86_64 %{arm} aarch64 riscv64
 
 BuildRequires:	cmake
 %if 0%{?el8}
@@ -106,6 +112,7 @@ fi
 * Sat Apr 30 2022 Christoph Erhardt <fedora@sicherha.de> - 1.2.1-1
 - Bump version to 1.2.1
 - Drop upstreamed patch
+- Add support for 32-bit x86 and Arm
 
 * Sat Apr 16 2022 Christoph Erhardt <fedora@sicherha.de> - 1.2-1
 - Bump version to 1.2
