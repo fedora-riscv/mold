@@ -1,5 +1,5 @@
 Name:		mold
-Version:	1.2
+Version:	1.2.1
 Release:	1%{?dist}
 Summary:	A Modern Linker
 
@@ -14,9 +14,6 @@ Source0:	%{url}/archive/v%{version}/%{name}-%{version}.tar.gz
 # in the Fedora tbb package)
 Patch0:		tbb-strip-werror.patch
 
-# Skip test if dwarfdump is unavailable
-Patch1:		0001-Skip-test-if-dwarfdump-is-unavailable.patch
-
 # mold can produce native binaries for i686, x86_64, ARMv7, aarch64 and riscv64,
 # but it only runs on a 64-bit host
 ExclusiveArch:	x86_64 aarch64 riscv64
@@ -30,13 +27,18 @@ BuildRequires:	gcc-c++ >= 10
 %endif
 BuildRequires:	mimalloc-devel
 BuildRequires:	openssl-devel
+BuildRequires:	python3
 BuildRequires:	xxhash-devel
 BuildRequires:	zlib-devel
 
 # The following packages are only required for executing the tests
 BuildRequires:	clang
+BuildRequires:	gdb
 BuildRequires:	glibc-static
 %if ! 0%{?el8}
+%ifarch x86_64
+BuildRequires:	/usr/lib/libc.so
+%endif
 BuildRequires:	libdwarf-tools
 %endif
 BuildRequires:	libstdc++-static
@@ -61,8 +63,6 @@ build time, especially in rapid debug-edit-rebuild cycles.
 %prep
 %autosetup -p1
 rm -r third-party/{mimalloc,xxhash}
-# Remove failing unit test for now (https://github.com/rui314/mold/issues/436)
-rm test/elf/gdb-index.sh
 
 %build
 %if 0%{?el8}
@@ -72,8 +72,6 @@ rm test/elf/gdb-index.sh
 
 %install
 %make_install %{build_args}
-# Overwrite absolute symlink with relative symlink
-ln -srf %{buildroot}%{_bindir}/mold %{buildroot}%{_libexecdir}/mold/ld
 chmod +x %{buildroot}%{_libdir}/mold/mold-wrapper.so
 
 %post
@@ -105,6 +103,10 @@ fi
 %{_mandir}/man1/mold.1*
 
 %changelog
+* Sat Apr 30 2022 Christoph Erhardt <fedora@sicherha.de> - 1.2.1-1
+- Bump version to 1.2.1
+- Drop upstreamed patch
+
 * Sat Apr 16 2022 Christoph Erhardt <fedora@sicherha.de> - 1.2-1
 - Bump version to 1.2
 - Drop upstreamed patches
