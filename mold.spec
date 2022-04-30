@@ -17,10 +17,6 @@ Patch0:		tbb-strip-werror.patch
 # Skip test if dwarfdump is unavailable
 Patch1:		0001-Skip-test-if-dwarfdump-is-unavailable.patch
 
-# Fix mimalloc compatibility with libstdc++ < 9:
-# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=68210
-Patch2:		0002-Fix-compatibility-with-libstdc-9.patch
-
 # mold can produce native binaries for i686, x86_64, ARMv7, aarch64 and riscv64,
 # but it only runs on a 64-bit host
 ExclusiveArch:	x86_64 aarch64 riscv64
