@@ -1,5 +1,5 @@
 Name:		mold
-Version:	1.2.1
+Version:	1.3.0
 Release:	1%{?dist}
 Summary:	A Modern Linker
 
@@ -14,12 +14,8 @@ Source0:	%{url}/archive/v%{version}/%{name}-%{version}.tar.gz
 # in the Fedora tbb package)
 Patch0:		tbb-strip-werror.patch
 
-# Fix LTO on 32-bit hosts
-Patch1:		0001-ELF-LTO-Fix-LTO-on-32-bit-hosts.patch
-
-# Skip failing tests on i686 and armv7l
-Patch2:		0002-Skip-static-pie-tests-on-i686-not-just-on-i386.patch
-Patch3:		0003-Skip-tests-that-fail-on-i686-and-armv7l.patch
+# Skip failing tests on armv7l
+Patch1:		0001-Skip-tests-that-fail-on-armv7l.patch
 
 # mold can currently produce native binaries for these architectures only
 ExclusiveArch:	%{ix86} x86_64 %{arm} aarch64 riscv64
@@ -109,6 +105,10 @@ fi
 %{_mandir}/man1/mold.1*
 
 %changelog
+* Sat Jun 18 2022 Christoph Erhardt <fedora@sicherha.de> - 1.3.0-1
+- Bump version to 1.3.0 (#2098316)
+- Drop upstreamed patches
+
 * Sat Apr 30 2022 Christoph Erhardt <fedora@sicherha.de> - 1.2.1-1
 - Bump version to 1.2.1
 - Drop upstreamed patch

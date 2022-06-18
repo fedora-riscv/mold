@@ -1,25 +1,25 @@
-From 7cfbb9c4895e51ab8673b6a3f14c82be49b023c8 Mon Sep 17 00:00:00 2001
-Message-Id: <7cfbb9c4895e51ab8673b6a3f14c82be49b023c8.1651339128.git.github@sicherha.de>
+From 5cb5f63ea2f2fc6d6ea24a3a9f1e73f6fc6c9fc9 Mon Sep 17 00:00:00 2001
+Message-Id: <5cb5f63ea2f2fc6d6ea24a3a9f1e73f6fc6c9fc9.1655550664.git.github@sicherha.de>
 From: Christoph Erhardt <github@sicherha.de>
 Date: Fri, 29 Apr 2022 21:44:33 +0200
-Subject: [PATCH] Skip tests that fail on i686 and armv7l
+Subject: [PATCH] Skip tests that fail on armv7l
 
 ---
  test/elf/exception.sh                 | 2 ++
- test/elf/gdb-index-compress-output.sh | 3 +++
- test/elf/gdb-index-dwarf2.sh          | 3 +++
- test/elf/gdb-index-dwarf3.sh          | 3 +++
- test/elf/gdb-index-dwarf4.sh          | 3 +++
- test/elf/gdb-index-dwarf5.sh          | 3 +++
+ test/elf/gdb-index-compress-output.sh | 1 +
+ test/elf/gdb-index-dwarf2.sh          | 1 +
+ test/elf/gdb-index-dwarf3.sh          | 1 +
+ test/elf/gdb-index-dwarf4.sh          | 1 +
+ test/elf/gdb-index-dwarf5.sh          | 1 +
  test/elf/hello-static.sh              | 2 ++
  test/elf/ifunc-static.sh              | 2 ++
- 8 files changed, 21 insertions(+)
+ 8 files changed, 11 insertions(+)
 
 diff --git a/test/elf/exception.sh b/test/elf/exception.sh
-index 5df54b14..a4138103 100755
+index 3288c783..2e9f02f9 100755
 --- a/test/elf/exception.sh
 +++ b/test/elf/exception.sh
-@@ -14,6 +14,8 @@ mold="$(pwd)/mold"
+@@ -13,6 +13,8 @@ cd "$(dirname "$0")"/../..
  t=out/test/elf/$testname
  mkdir -p $t
  
@@ -29,80 +29,70 @@ index 5df54b14..a4138103 100755
  int main() {
    try {
 diff --git a/test/elf/gdb-index-compress-output.sh b/test/elf/gdb-index-compress-output.sh
-index 05bfabd2..c22792ae 100755
+index 926f70df..62eda85c 100755
 --- a/test/elf/gdb-index-compress-output.sh
 +++ b/test/elf/gdb-index-compress-output.sh
-@@ -16,6 +16,9 @@ mkdir -p $t
+@@ -15,6 +15,7 @@ mkdir -p $t
  
  [ $MACHINE = $(uname -m) ] || { echo skipped; exit; }
  
 +[ $MACHINE = armv7l ] && { echo skipped; exit; }
-+[ $MACHINE = i686 ] && { echo skipped; exit; }
-+
- which gdb >& /dev/null || { echo skipped; exit; }
+ [ $MACHINE = riscv64 ] && { echo skipped; exit; }
  
- cat <<EOF | $CC -c -o $t/a.o -fPIC -g -ggnu-pubnames -gdwarf-4 -xc - -ffunction-sections
+ which gdb >& /dev/null || { echo skipped; exit; }
 diff --git a/test/elf/gdb-index-dwarf2.sh b/test/elf/gdb-index-dwarf2.sh
-index 8e15c8e8..b6e6297e 100755
+index 0ee1449c..d2efba9c 100755
 --- a/test/elf/gdb-index-dwarf2.sh
 +++ b/test/elf/gdb-index-dwarf2.sh
-@@ -16,6 +16,9 @@ mkdir -p $t
+@@ -15,6 +15,7 @@ mkdir -p $t
  
  [ $MACHINE = $(uname -m) ] || { echo skipped; exit; }
  
 +[ $MACHINE = armv7l ] && { echo skipped; exit; }
-+[ $MACHINE = i686 ] && { echo skipped; exit; }
-+
- which gdb >& /dev/null || { echo skipped; exit; }
+ [ $MACHINE = riscv64 ] && { echo skipped; exit; }
  
- echo 'int main() {}' | $CC -o /dev/null -xc -gdwarf-2 -g - >& /dev/null ||
+ which gdb >& /dev/null || { echo skipped; exit; }
 diff --git a/test/elf/gdb-index-dwarf3.sh b/test/elf/gdb-index-dwarf3.sh
-index 727dfcbe..466f9597 100755
+index 600adcf1..4d29416c 100755
 --- a/test/elf/gdb-index-dwarf3.sh
 +++ b/test/elf/gdb-index-dwarf3.sh
-@@ -16,6 +16,9 @@ mkdir -p $t
+@@ -15,6 +15,7 @@ mkdir -p $t
  
  [ $MACHINE = $(uname -m) ] || { echo skipped; exit; }
  
 +[ $MACHINE = armv7l ] && { echo skipped; exit; }
-+[ $MACHINE = i686 ] && { echo skipped; exit; }
-+
- which gdb >& /dev/null || { echo skipped; exit; }
+ [ $MACHINE = riscv64 ] && { echo skipped; exit; }
  
- echo 'int main() {}' | $CC -o /dev/null -xc -gdwarf-3 -g - >& /dev/null ||
+ which gdb >& /dev/null || { echo skipped; exit; }
 diff --git a/test/elf/gdb-index-dwarf4.sh b/test/elf/gdb-index-dwarf4.sh
-index 79ae5d1a..5512cd27 100755
+index a248fbcd..0df17625 100755
 --- a/test/elf/gdb-index-dwarf4.sh
 +++ b/test/elf/gdb-index-dwarf4.sh
-@@ -16,6 +16,9 @@ mkdir -p $t
+@@ -15,6 +15,7 @@ mkdir -p $t
  
  [ $MACHINE = $(uname -m) ] || { echo skipped; exit; }
  
 +[ $MACHINE = armv7l ] && { echo skipped; exit; }
-+[ $MACHINE = i686 ] && { echo skipped; exit; }
-+
- which gdb >& /dev/null || { echo skipped; exit; }
+ [ $MACHINE = riscv64 ] && { echo skipped; exit; }
  
- echo 'int main() {}' | $CC -o /dev/null -xc -gdwarf-4 -g - >& /dev/null ||
+ which gdb >& /dev/null || { echo skipped; exit; }
 diff --git a/test/elf/gdb-index-dwarf5.sh b/test/elf/gdb-index-dwarf5.sh
-index 02c0249d..09d20907 100755
+index ee33e8d0..01d324b6 100755
 --- a/test/elf/gdb-index-dwarf5.sh
 +++ b/test/elf/gdb-index-dwarf5.sh
-@@ -16,6 +16,9 @@ mkdir -p $t
+@@ -15,6 +15,7 @@ mkdir -p $t
  
  [ $MACHINE = $(uname -m) ] || { echo skipped; exit; }
  
 +[ $MACHINE = armv7l ] && { echo skipped; exit; }
-+[ $MACHINE = i686 ] && { echo skipped; exit; }
-+
- which gdb >& /dev/null || { echo skipped; exit; }
+ [ $MACHINE = riscv64 ] && { echo skipped; exit; }
  
- echo 'int main() {}' | $CC -o /dev/null -xc -gdwarf-5 -g - >& /dev/null ||
+ which gdb >& /dev/null || { echo skipped; exit; }
 diff --git a/test/elf/hello-static.sh b/test/elf/hello-static.sh
-index 5780b88b..05c60f91 100755
+index 62dce63c..6c1dde72 100755
 --- a/test/elf/hello-static.sh
 +++ b/test/elf/hello-static.sh
-@@ -14,6 +14,8 @@ mold="$(pwd)/mold"
+@@ -13,6 +13,8 @@ cd "$(dirname "$0")"/../..
  t=out/test/elf/$testname
  mkdir -p $t
  
@@ -112,10 +102,10 @@ index 5780b88b..05c60f91 100755
  #include <stdio.h>
  
 diff --git a/test/elf/ifunc-static.sh b/test/elf/ifunc-static.sh
-index e7b0b8c8..150dc921 100755
+index 295350a3..7f1d2686 100755
 --- a/test/elf/ifunc-static.sh
 +++ b/test/elf/ifunc-static.sh
-@@ -17,6 +17,8 @@ mkdir -p $t
+@@ -16,6 +16,8 @@ mkdir -p $t
  # IFUNC is not supported on RISC-V yet
  [ $MACHINE = riscv64 ] && { echo skipped; exit; }
  
@@ -125,5 +115,5 @@ index e7b0b8c8..150dc921 100755
  echo 'int main() {}' | $CC -o $t/exe -xc -
  readelf --dynamic $t/exe | grep -q ld-musl && { echo OK; exit; }
 -- 
-2.35.1
+2.36.1
 
