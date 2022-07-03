@@ -1,5 +1,5 @@
 Name:		mold
-Version:	1.3.0
+Version:	1.3.1
 Release:	1%{?dist}
 Summary:	A Modern Linker
 
@@ -105,6 +105,9 @@ fi
 %{_mandir}/man1/mold.1*
 
 %changelog
+* Sun Jul 03 2022 Christoph Erhardt <fedora@sicherha.de> - 1.3.1-1
+- Bump version to 1.3.1 (#2103365)
+
 * Sat Jun 18 2022 Christoph Erhardt <fedora@sicherha.de> - 1.3.0-1
 - Bump version to 1.3.0 (#2098316)
 - Drop upstreamed patches
