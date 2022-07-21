@@ -1,6 +1,6 @@
 Name:		mold
 Version:	1.3.1
-Release:	1%{?dist}
+Release:	2%{?dist}
 Summary:	A Modern Linker
 
 License:	AGPLv3+
@@ -105,6 +105,9 @@ fi
 %{_mandir}/man1/mold.1*
 
 %changelog
+* Thu Jul 21 2022 Fedora Release Engineering <releng@fedoraproject.org> - 1.3.1-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_37_Mass_Rebuild
+
 * Sun Jul 03 2022 Christoph Erhardt <fedora@sicherha.de> - 1.3.1-1
 - Bump version to 1.3.1 (#2103365)
 
