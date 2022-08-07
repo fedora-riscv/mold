@@ -1,9 +1,9 @@
 Name:		mold
-Version:	1.3.1
-Release:	2%{?dist}
+Version:	1.4.0
+Release:	1%{?dist}
 Summary:	A Modern Linker
 
-License:	AGPLv3+
+License:	AGPL-3.0-or-later AND (Apache-2.0 OR MIT)
 URL:		https://github.com/rui314/mold
 Source0:	%{url}/archive/v%{version}/%{name}-%{version}.tar.gz
 
@@ -16,6 +16,8 @@ Patch0:		tbb-strip-werror.patch
 
 # Skip failing tests on armv7l
 Patch1:		0001-Skip-tests-that-fail-on-armv7l.patch
+# Allow building against the system-provided `xxhash.h`
+Patch2:		0002-Use-system-compatible-include-path-for-xxhash.h.patch
 
 # mold can currently produce native binaries for these architectures only
 ExclusiveArch:	%{ix86} x86_64 %{arm} aarch64 riscv64
@@ -105,6 +107,11 @@ fi
 %{_mandir}/man1/mold.1*
 
 %changelog
+* Sun Aug 07 2022 Christoph Erhardt <fedora@sicherha.de> - 1.4.0-1
+- Bump version to 1.4.0 (#2116004)
+- Refresh patch
+- Use SPDX notation for `License:` field
+
 * Thu Jul 21 2022 Fedora Release Engineering <releng@fedoraproject.org> - 1.3.1-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_37_Mass_Rebuild
 

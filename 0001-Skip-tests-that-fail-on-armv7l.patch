@@ -1,8 +1,8 @@
-From 5cb5f63ea2f2fc6d6ea24a3a9f1e73f6fc6c9fc9 Mon Sep 17 00:00:00 2001
-Message-Id: <5cb5f63ea2f2fc6d6ea24a3a9f1e73f6fc6c9fc9.1655550664.git.github@sicherha.de>
+From b0b069ece8d76914670bfdfd04ea628477c95988 Mon Sep 17 00:00:00 2001
+Message-Id: <b0b069ece8d76914670bfdfd04ea628477c95988.1659770551.git.github@sicherha.de>
 From: Christoph Erhardt <github@sicherha.de>
 Date: Fri, 29 Apr 2022 21:44:33 +0200
-Subject: [PATCH] Skip tests that fail on armv7l
+Subject: [PATCH 1/2] Skip tests that fail on armv7l
 
 ---
  test/elf/exception.sh                 | 2 ++
@@ -16,11 +16,11 @@ Subject: [PATCH] Skip tests that fail on armv7l
  8 files changed, 11 insertions(+)
 
 diff --git a/test/elf/exception.sh b/test/elf/exception.sh
-index 3288c783..2e9f02f9 100755
+index 2a68a261..f406e2e2 100755
 --- a/test/elf/exception.sh
 +++ b/test/elf/exception.sh
-@@ -13,6 +13,8 @@ cd "$(dirname "$0")"/../..
- t=out/test/elf/$testname
+@@ -12,6 +12,8 @@ echo -n "Testing $testname ... "
+ t=out/test/elf/$MACHINE/$testname
  mkdir -p $t
  
 +[ $MACHINE = armv7l ] && { echo skipped; exit; }
@@ -29,10 +29,10 @@ index 3288c783..2e9f02f9 100755
  int main() {
    try {
 diff --git a/test/elf/gdb-index-compress-output.sh b/test/elf/gdb-index-compress-output.sh
-index 926f70df..62eda85c 100755
+index 83cd2cea..015fe874 100755
 --- a/test/elf/gdb-index-compress-output.sh
 +++ b/test/elf/gdb-index-compress-output.sh
-@@ -15,6 +15,7 @@ mkdir -p $t
+@@ -14,6 +14,7 @@ mkdir -p $t
  
  [ $MACHINE = $(uname -m) ] || { echo skipped; exit; }
  
@@ -41,10 +41,10 @@ index 926f70df..62eda85c 100755
  
  which gdb >& /dev/null || { echo skipped; exit; }
 diff --git a/test/elf/gdb-index-dwarf2.sh b/test/elf/gdb-index-dwarf2.sh
-index 0ee1449c..d2efba9c 100755
+index 853f5ed8..dce14849 100755
 --- a/test/elf/gdb-index-dwarf2.sh
 +++ b/test/elf/gdb-index-dwarf2.sh
-@@ -15,6 +15,7 @@ mkdir -p $t
+@@ -14,6 +14,7 @@ mkdir -p $t
  
  [ $MACHINE = $(uname -m) ] || { echo skipped; exit; }
  
@@ -53,10 +53,10 @@ index 0ee1449c..d2efba9c 100755
  
  which gdb >& /dev/null || { echo skipped; exit; }
 diff --git a/test/elf/gdb-index-dwarf3.sh b/test/elf/gdb-index-dwarf3.sh
-index 600adcf1..4d29416c 100755
+index d2ce0804..0ced3284 100755
 --- a/test/elf/gdb-index-dwarf3.sh
 +++ b/test/elf/gdb-index-dwarf3.sh
-@@ -15,6 +15,7 @@ mkdir -p $t
+@@ -14,6 +14,7 @@ mkdir -p $t
  
  [ $MACHINE = $(uname -m) ] || { echo skipped; exit; }
  
@@ -65,10 +65,10 @@ index 600adcf1..4d29416c 100755
  
  which gdb >& /dev/null || { echo skipped; exit; }
 diff --git a/test/elf/gdb-index-dwarf4.sh b/test/elf/gdb-index-dwarf4.sh
-index a248fbcd..0df17625 100755
+index ca81cf13..6be62e17 100755
 --- a/test/elf/gdb-index-dwarf4.sh
 +++ b/test/elf/gdb-index-dwarf4.sh
-@@ -15,6 +15,7 @@ mkdir -p $t
+@@ -14,6 +14,7 @@ mkdir -p $t
  
  [ $MACHINE = $(uname -m) ] || { echo skipped; exit; }
  
@@ -77,10 +77,10 @@ index a248fbcd..0df17625 100755
  
  which gdb >& /dev/null || { echo skipped; exit; }
 diff --git a/test/elf/gdb-index-dwarf5.sh b/test/elf/gdb-index-dwarf5.sh
-index ee33e8d0..01d324b6 100755
+index 8d5584e6..e4b30b94 100755
 --- a/test/elf/gdb-index-dwarf5.sh
 +++ b/test/elf/gdb-index-dwarf5.sh
-@@ -15,6 +15,7 @@ mkdir -p $t
+@@ -14,6 +14,7 @@ mkdir -p $t
  
  [ $MACHINE = $(uname -m) ] || { echo skipped; exit; }
  
@@ -89,11 +89,11 @@ index ee33e8d0..01d324b6 100755
  
  which gdb >& /dev/null || { echo skipped; exit; }
 diff --git a/test/elf/hello-static.sh b/test/elf/hello-static.sh
-index 62dce63c..6c1dde72 100755
+index a2c9626b..eed8b935 100755
 --- a/test/elf/hello-static.sh
 +++ b/test/elf/hello-static.sh
-@@ -13,6 +13,8 @@ cd "$(dirname "$0")"/../..
- t=out/test/elf/$testname
+@@ -12,6 +12,8 @@ echo -n "Testing $testname ... "
+ t=out/test/elf/$MACHINE/$testname
  mkdir -p $t
  
 +[ $MACHINE = armv7l ] && { echo skipped; exit; }
@@ -102,18 +102,18 @@ index 62dce63c..6c1dde72 100755
  #include <stdio.h>
  
 diff --git a/test/elf/ifunc-static.sh b/test/elf/ifunc-static.sh
-index 295350a3..7f1d2686 100755
+index 8a25fa1c..b0cf698e 100755
 --- a/test/elf/ifunc-static.sh
 +++ b/test/elf/ifunc-static.sh
-@@ -16,6 +16,8 @@ mkdir -p $t
+@@ -15,6 +15,8 @@ mkdir -p $t
  # IFUNC is not supported on RISC-V yet
  [ $MACHINE = riscv64 ] && { echo skipped; exit; }
  
 +[ $MACHINE = armv7l ] && { echo skipped; exit; }
 +
  # Skip if libc is musl because musl does not support GNU FUNC
- echo 'int main() {}' | $CC -o $t/exe -xc -
- readelf --dynamic $t/exe | grep -q ld-musl && { echo OK; exit; }
+ ldd --help 2>&1 | grep -q musl && { echo skipped; exit; }
+ 
 -- 
-2.36.1
+2.37.1
 
