@@ -1,5 +1,5 @@
 Name:		mold
-Version:	1.4.0
+Version:	1.4.1
 Release:	1%{?dist}
 Summary:	A Modern Linker
 
@@ -14,10 +14,8 @@ Source0:	%{url}/archive/v%{version}/%{name}-%{version}.tar.gz
 # in the Fedora tbb package)
 Patch0:		tbb-strip-werror.patch
 
-# Skip failing tests on armv7l
-Patch1:		0001-Skip-tests-that-fail-on-armv7l.patch
 # Allow building against the system-provided `xxhash.h`
-Patch2:		0002-Use-system-compatible-include-path-for-xxhash.h.patch
+Patch2:		0001-Use-system-compatible-include-path-for-xxhash.h.patch
 
 # mold can currently produce native binaries for these architectures only
 ExclusiveArch:	%{ix86} x86_64 %{arm} aarch64 riscv64
@@ -95,16 +93,22 @@ fi
 %make_build %{build_args} test
 
 %files
-%license LICENSE
+%license %{_docdir}/mold/LICENSE
 %ghost %{_bindir}/ld
 %{_bindir}/mold
 %{_bindir}/ld.mold
 %{_bindir}/ld64.mold
 %{_libdir}/mold/mold-wrapper.so
 %{_libexecdir}/mold/ld
+%{_mandir}/man1/ld.mold.1*
 %{_mandir}/man1/mold.1*
 
 %changelog
+* Thu Aug 18 2022 Christoph Erhardt <fedora@sicherha.de> - 1.4.1-1
+- Bump version to 1.4.1 (#2119324)
+- Refresh patch
+- Remove superfluous directory entries from `%files`
+
 * Sun Aug 07 2022 Christoph Erhardt <fedora@sicherha.de> - 1.4.0-1
 - Bump version to 1.4.0 (#2116004)
 - Refresh patch

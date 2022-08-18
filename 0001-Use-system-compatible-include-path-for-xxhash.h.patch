@@ -1,0 +1,43 @@
+From 092673cd7b0fe96e4c6f176c9ea35943e44f984e Mon Sep 17 00:00:00 2001
+Message-Id: <092673cd7b0fe96e4c6f176c9ea35943e44f984e.1660813566.git.github@sicherha.de>
+From: Christoph Erhardt <github@sicherha.de>
+Date: Sat, 6 Aug 2022 09:18:54 +0200
+Subject: [PATCH] Use system-compatible include path for `xxhash.h`
+
+Distributors that build mold against the system-provided xxHash package
+expect its header file `xxhash.h` in the top-level include directory,
+not in an `xxhash` subdirectory. Adjust the include path and the
+`#include` directive accordingly.
+---
+ Makefile | 1 +
+ mold.h   | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/Makefile b/Makefile
+index 1301236c..35e7fe76 100644
+--- a/Makefile
++++ b/Makefile
+@@ -47,6 +47,7 @@ CXXFLAGS = -O2
+ 
+ MOLD_CXXFLAGS := -std=c++20 -fno-exceptions -fno-unwind-tables \
+                  -fno-asynchronous-unwind-tables \
++                 -Ithird-party -Ithird-party/xxhash \
+                  -DMOLD_VERSION=\"$(VERSION)\" -DLIBDIR="\"$(LIBDIR)\""
+ 
+ MOLD_LDFLAGS := -pthread -lz -lm -ldl
+diff --git a/mold.h b/mold.h
+index a50127ed..b8df38d3 100644
+--- a/mold.h
++++ b/mold.h
+@@ -32,7 +32,7 @@
+ #endif
+ 
+ #define XXH_INLINE_ALL 1
+-#include "third-party/xxhash/xxhash.h"
++#include <xxhash.h>
+ 
+ #ifdef _MSC_VER
+ #  define unreachable() __assume(0)
+-- 
+2.37.2
+
