@@ -100,9 +100,7 @@ fi
 %{_bindir}/mold
 %{_bindir}/ld.mold
 %{_bindir}/ld64.mold
-%{_libdir}/mold
 %{_libdir}/mold/mold-wrapper.so
-%{_libexecdir}/mold
 %{_libexecdir}/mold/ld
 %{_mandir}/man1/mold.1*
 
