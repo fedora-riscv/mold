@@ -1,5 +1,5 @@
 Name:		mold
-Version:	1.4.1
+Version:	1.4.2
 Release:	1%{?dist}
 Summary:	A Modern Linker
 
@@ -104,6 +104,10 @@ fi
 %{_mandir}/man1/mold.1*
 
 %changelog
+* Sun Sep 04 2022 Christoph Erhardt <fedora@sicherha.de> - 1.4.2-1
+- Bump version to 1.4.2
+- Refresh patch
+
 * Thu Aug 18 2022 Christoph Erhardt <fedora@sicherha.de> - 1.4.1-1
 - Bump version to 1.4.1 (#2119324)
 - Refresh patch
