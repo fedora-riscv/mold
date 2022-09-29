@@ -1,32 +1,46 @@
-From cb62c8b3cc981cbffa3b151d15961573c71fac51 Mon Sep 17 00:00:00 2001
-Message-Id: <cb62c8b3cc981cbffa3b151d15961573c71fac51.1662274415.git.github@sicherha.de>
+From db11436c0ccbfee0f617ae7498c25fb2f4e76626 Mon Sep 17 00:00:00 2001
+Message-Id: <db11436c0ccbfee0f617ae7498c25fb2f4e76626.1664460024.git.github@sicherha.de>
 From: Christoph Erhardt <github@sicherha.de>
-Date: Sat, 6 Aug 2022 09:18:54 +0200
-Subject: [PATCH] Use system-compatible include path for `xxhash.h`
+Date: Tue, 27 Sep 2022 13:32:57 +0200
+Subject: [PATCH 1/2] Use system-compatible include path for `xxhash.h`
 
 Distributors that build mold against the system-provided xxHash package
 expect its header file `xxhash.h` in the top-level include directory,
 not in an `xxhash` subdirectory. Adjust the include path and the
 `#include` directive accordingly.
 ---
- Makefile | 1 +
- mold.h   | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ CMakeLists.txt | 2 ++
+ Makefile       | 1 +
+ mold.h         | 2 +-
+ 3 files changed, 4 insertions(+), 1 deletion(-)
 
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 79c035d5..520c7bdf 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -126,6 +126,8 @@ else()
+   mold_add_tbb()
+ endif()
+ 
++target_include_directories(mold PRIVATE third-party/xxhash)
++
+ if(WIN32)
+   if(NOT CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+     message(FATAL_ERROR
 diff --git a/Makefile b/Makefile
-index d3f47801..59943a9c 100644
+index 2d14c85f..40fa5aab 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -47,6 +47,7 @@ CXXFLAGS = -O2
+@@ -59,6 +59,7 @@ CXXFLAGS = -O2
  
  MOLD_CXXFLAGS := -std=c++20 -fno-exceptions -fno-unwind-tables \
                   -fno-asynchronous-unwind-tables \
-+                 -Ithird-party -Ithird-party/xxhash \
++                 -Ithird-party/xxhash \
+                  -Wno-sign-compare -Wno-unused-function \
                   -DMOLD_VERSION=\"$(VERSION)\" -DLIBDIR="\"$(LIBDIR)\""
  
- ifeq ($(OS), OpenBSD)
 diff --git a/mold.h b/mold.h
-index 94ef8226..9f857534 100644
+index b1b859bd..c8dbfcf2 100644
 --- a/mold.h
 +++ b/mold.h
 @@ -32,7 +32,7 @@
@@ -39,5 +53,5 @@ index 94ef8226..9f857534 100644
  #ifdef NDEBUG
  # define unreachable() __builtin_unreachable()
 -- 
-2.37.2
+2.37.3
 
