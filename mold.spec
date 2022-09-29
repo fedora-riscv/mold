@@ -111,7 +111,7 @@ fi
 * Thu Aug 18 2022 Christoph Erhardt <fedora@sicherha.de> - 1.4.1-1
 - Bump version to 1.4.1 (#2119324)
 - Refresh patch
-- Remove superfluous directory entries from `%files`
+- Remove superfluous directory entries from `%%files`
 
 * Sun Aug 07 2022 Christoph Erhardt <fedora@sicherha.de> - 1.4.0-1
 - Bump version to 1.4.0 (#2116004)
