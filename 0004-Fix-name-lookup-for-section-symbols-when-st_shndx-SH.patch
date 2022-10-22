@@ -1,0 +1,40 @@
+From 8bfdf07e71706162ab98159bf1a412d31ff31e0e Mon Sep 17 00:00:00 2001
+Message-Id: <8bfdf07e71706162ab98159bf1a412d31ff31e0e.1666443387.git.github@sicherha.de>
+In-Reply-To: <6c0c571d629d924e3f59d8710de6589848204e17.1666443387.git.github@sicherha.de>
+References: <6c0c571d629d924e3f59d8710de6589848204e17.1666443387.git.github@sicherha.de>
+From: Christoph Erhardt <github@sicherha.de>
+Date: Sat, 22 Oct 2022 14:41:42 +0200
+Subject: [PATCH 4/4] Fix name lookup for section symbols when `st_shndx ==
+ SHN_XINDEX`
+
+When the section-header index has the escape value `SHN_XINDEX`, the
+actual index must be looked up in the separate `SHT_SYMTAB_SHNDX` table.
+Trying to use `SHN_XINDEX` (= 0xffff) as an index results in an
+out-of-bounds read. The error can be observed when running the
+`x86_64_many-sections.sh` test on RHEL 8 or 9 (but not on Fedora,
+because there the assembler doesn't emit section symbols).
+
+Instead of using `st_shndx` directly, call the pre-existing helper
+method `get_shndx()` to get the correct behaviour.
+
+Signed-off-by: Christoph Erhardt <github@sicherha.de>
+---
+ elf/input-files.cc | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/elf/input-files.cc b/elf/input-files.cc
+index 15ccd634..3c5ca619 100644
+--- a/elf/input-files.cc
++++ b/elf/input-files.cc
+@@ -439,7 +439,7 @@ void ObjectFile<E>::initialize_symbols(Context<E> &ctx) {
+ 
+     std::string_view name;
+     if (esym.st_type == STT_SECTION)
+-      name = this->shstrtab.data() + this->elf_sections[esym.st_shndx].sh_name;
++      name = this->shstrtab.data() + this->elf_sections[get_shndx(esym)].sh_name;
+     else
+       name = this->symbol_strtab.data() + esym.st_name;
+ 
+-- 
+2.37.3
+

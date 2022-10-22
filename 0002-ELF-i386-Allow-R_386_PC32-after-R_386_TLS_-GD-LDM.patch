@@ -1,0 +1,44 @@
+From 2f5b3be6214d8157736e60f68693352a3ffd5a47 Mon Sep 17 00:00:00 2001
+Message-Id: <2f5b3be6214d8157736e60f68693352a3ffd5a47.1666197268.git.github@sicherha.de>
+In-Reply-To: <6c0c571d629d924e3f59d8710de6589848204e17.1666197268.git.github@sicherha.de>
+References: <6c0c571d629d924e3f59d8710de6589848204e17.1666197268.git.github@sicherha.de>
+From: Rui Ueyama <ruiu@bluewhale.systems>
+Date: Wed, 19 Oct 2022 19:33:18 +0800
+Subject: [PATCH 2/3] [ELF][i386] Allow R_386_PC32 after R_386_TLS_{GD,LDM}
+
+I don't know why GCC sometimes creates a PC32 relocation instead of
+PLT32 after a TLS_GD/TLS_LDM. I believe it's strictly speaking a
+violation of the psABI. But we need to handle such input.
+
+Fixes https://github.com/rui314/mold/issues/794
+---
+ elf/arch-i386.cc | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/elf/arch-i386.cc b/elf/arch-i386.cc
+index 46391844..20563faa 100644
+--- a/elf/arch-i386.cc
++++ b/elf/arch-i386.cc
+@@ -485,7 +485,8 @@ void InputSection<E>::scan_relocations(Context<E> &ctx) {
+         Fatal(ctx) << *this << ": TLS_GD reloc must be followed by PLT or GOT32";
+ 
+       if (u32 ty = rels[i + 1].r_type;
+-          ty != R_386_PLT32 && ty != R_386_GOT32 && ty != R_386_GOT32X)
++          ty != R_386_PLT32 && ty != R_386_PC32 &&
++          ty != R_386_GOT32 && ty != R_386_GOT32X)
+         Fatal(ctx) << *this << ": TLS_GD reloc must be followed by PLT or GOT32";
+ 
+       if (relax_tlsgd(ctx, sym))
+@@ -498,7 +499,8 @@ void InputSection<E>::scan_relocations(Context<E> &ctx) {
+         Fatal(ctx) << *this << ": TLS_LDM reloc must be followed by PLT or GOT32";
+ 
+       if (u32 ty = rels[i + 1].r_type;
+-          ty != R_386_PLT32 && ty != R_386_GOT32 && ty != R_386_GOT32X)
++          ty != R_386_PLT32 && ty != R_386_PC32 &&
++          ty != R_386_GOT32 && ty != R_386_GOT32X)
+         Fatal(ctx) << *this << ": TLS_LDM reloc must be followed by PLT or GOT32";
+ 
+       if (relax_tlsld(ctx))
+-- 
+2.37.3
+
