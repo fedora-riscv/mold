@@ -20,8 +20,8 @@ Patch0:		tbb-strip-werror.patch
 # Allow building against the system-provided `xxhash.h`
 Patch2:		0001-Use-system-compatible-include-path-for-xxhash.h.patch
 
-# mold can currently produce native binaries for these architectures only
-ExclusiveArch:	%{ix86} x86_64 %{arm32} aarch64 %{power64} %{riscv32} %{riscv64} s390x sparc64 sparc64v
+# mold currently cannot produce native binaries for MIPS
+ExcludeArch:	%{mips}
 
 BuildRequires:	cmake
 %if 0%{?el8}
@@ -110,6 +110,7 @@ fi
 * Fri Nov 18 2022 Christoph Erhardt <fedora@sicherha.de> - 1.7.0-1
 - Bump version to 1.7.0
 - Drop upstreamed patches
+- Move from `ExclusiveArch` to `ExcludeArch` as only MIPS remains unsupported
 
 * Sat Oct 22 2022 Christoph Erhardt <fedora@sicherha.de> - 1.6.0-1
 - Bump version to 1.6.0
