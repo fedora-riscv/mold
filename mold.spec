@@ -2,7 +2,7 @@
 %undefine __cmake_in_source_build
 
 Name:		mold
-Version:	1.7.0
+Version:	1.7.1
 Release:	1%{?dist}
 Summary:	A Modern Linker
 
@@ -110,6 +110,9 @@ fi
 %{_mandir}/man1/mold.1*
 
 %changelog
+* Sat Nov 19 2022 Christoph Erhardt <fedora@sicherha.de> - 1.7.1-1
+- Bump version to 1.7.1
+
 * Fri Nov 18 2022 Christoph Erhardt <fedora@sicherha.de> - 1.7.0-1
 - Bump version to 1.7.0
 - Drop upstreamed patches
