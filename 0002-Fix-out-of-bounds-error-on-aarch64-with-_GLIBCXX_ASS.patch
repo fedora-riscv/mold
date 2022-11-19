@@ -1,0 +1,45 @@
+From a2c7ad822b75bba41c0de6ad02eef2cbae09f252 Mon Sep 17 00:00:00 2001
+Message-Id: <a2c7ad822b75bba41c0de6ad02eef2cbae09f252.1668864292.git.github@sicherha.de>
+From: Christoph Erhardt <github@sicherha.de>
+Date: Sat, 19 Nov 2022 14:01:52 +0100
+Subject: [PATCH] Fix out-of-bounds error on aarch64 with `_GLIBCXX_ASSERTIONS`
+ enabled (again)
+
+The square-bracket operator of `std::span` has undefined behaviour for
+out-of-bounds element accesses. Resorting to iterators yields defined
+behaviour.
+
+This issue (originally described in #298) had been fixed in the past by
+commit 03ba8f93255055adaf69984c17bcfea3b22340db, but it has since
+resurfaced with commit 193c245781df18e3c7d96efc1ea03e9760175681.
+
+Signed-off-by: Christoph Erhardt <github@sicherha.de>
+---
+ elf/thunks.cc | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/elf/thunks.cc b/elf/thunks.cc
+index 89063757..7dff795a 100644
+--- a/elf/thunks.cc
++++ b/elf/thunks.cc
+@@ -222,7 +222,7 @@ void create_range_extension_thunks(Context<E> &ctx, OutputSection<E> &osec) {
+     thunk.offset = offset;
+ 
+     // Scan relocations between B and C to collect symbols that need thunks.
+-    tbb::parallel_for_each(&m[b], &m[c], [&](InputSection<E> *isec) {
++    tbb::parallel_for_each(m.begin() + b, m.begin() + c, [&](InputSection<E> *isec) {
+       scan_rels(ctx, *isec, thunk);
+     });
+ 
+@@ -244,7 +244,7 @@ void create_range_extension_thunks(Context<E> &ctx, OutputSection<E> &osec) {
+     }
+ 
+     // Scan relocations again to fix symbol offsets in the last thunk.
+-    tbb::parallel_for_each(&m[b], &m[c], [&](InputSection<E> *isec) {
++    tbb::parallel_for_each(m.begin() + b, m.begin() + c, [&](InputSection<E> *isec) {
+       std::span<Symbol<E> *> syms = isec->file.symbols;
+       std::span<const ElfRel<E>> rels = isec->get_rels(ctx);
+       std::span<RangeExtensionRef> range_extn = isec->extra.range_extn;
+-- 
+2.38.1
+

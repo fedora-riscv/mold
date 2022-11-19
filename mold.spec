@@ -18,7 +18,10 @@ Source0:	%{url}/archive/v%{version}/%{name}-%{version}.tar.gz
 Patch0:		tbb-strip-werror.patch
 
 # Allow building against the system-provided `xxhash.h`
-Patch2:		0001-Use-system-compatible-include-path-for-xxhash.h.patch
+Patch1:		0001-Use-system-compatible-include-path-for-xxhash.h.patch
+
+# Fix out-of-bounds error on ARM (https://github.com/rui314/mold/pull/877)
+Patch2:		0002-Fix-out-of-bounds-error-on-aarch64-with-_GLIBCXX_ASS.patch
 
 # mold currently cannot produce native binaries for MIPS
 ExcludeArch:	%{mips}
