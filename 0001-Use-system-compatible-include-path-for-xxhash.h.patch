@@ -1,5 +1,5 @@
-From 73862d08e89da6b2c72eabbf3f61d612974e2ee0 Mon Sep 17 00:00:00 2001
-Message-Id: <73862d08e89da6b2c72eabbf3f61d612974e2ee0.1668329176.git.github@sicherha.de>
+From e3f3915ba34621312c1983cbeffde110b14766b3 Mon Sep 17 00:00:00 2001
+Message-Id: <e3f3915ba34621312c1983cbeffde110b14766b3.1672045225.git.github@sicherha.de>
 From: Christoph Erhardt <github@sicherha.de>
 Date: Sat, 6 Aug 2022 09:18:54 +0200
 Subject: [PATCH] Use system-compatible include path for `xxhash.h`
@@ -14,11 +14,11 @@ not in an `xxhash` subdirectory. Adjust the include path and the
  2 files changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 3c14940c..23e1d712 100644
+index 6b985719..c2fdb81d 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -191,6 +191,8 @@ else()
-   mold_add_tbb()
+@@ -196,6 +196,8 @@ if(EXISTS "${CMAKE_SOURCE_DIR}/LICENSE.md")
+   set(MOLD_IS_SOLD ON)
  endif()
  
 +target_include_directories(mold PRIVATE third-party/xxhash)
@@ -27,7 +27,7 @@ index 3c14940c..23e1d712 100644
  if(WIN32)
    if(NOT CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
 diff --git a/mold.h b/mold.h
-index 6f9fe2e8..5ebad268 100644
+index 508f1e42..3f092b66 100644
 --- a/mold.h
 +++ b/mold.h
 @@ -32,7 +32,7 @@
