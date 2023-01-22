@@ -1,3 +1,8 @@
+%if 0%{?el8}
+# Disable annobin plugin on el8 (unusable with gcc-toolset-12)
+%undefine _annotated_build
+%endif
+
 Name:		mold
 Version:	1.10.0
 Release:	1%{?dist}
