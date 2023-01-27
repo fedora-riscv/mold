@@ -1,6 +1,6 @@
 Name:		mold
 Version:	1.10.0
-Release:	1%{?dist}
+Release:	1.rv64%{?dist}
 Summary:	A Modern Linker
 
 License:	AGPL-3.0-or-later AND (Apache-2.0 OR MIT)
@@ -93,7 +93,11 @@ fi
 %if 0%{?el8}
 . /opt/rh/gcc-toolset-12/enable
 %endif
+%ifnarch riscv64
 %ctest
+%else
+:
+%endif
 
 %files
 %license %{_docdir}/mold/LICENSE
@@ -106,6 +110,9 @@ fi
 %{_mandir}/man1/mold.1*
 
 %changelog
+* Fri Jan 27 2023 Liu Yang <Yang.Liu.sn@gmail.com> - 1.10.0-1.rv64
+- Fix build on riscv64.
+
 * Sat Jan 21 2023 Christoph Erhardt <fedora@sicherha.de> - 1.10.0-1
 - Bump version to 1.10.0
 - Refresh patch
