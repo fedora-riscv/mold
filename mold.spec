@@ -59,7 +59,7 @@ Requires(preun): %{_sbindir}/alternatives
 
 # API-incompatible with older tbb 2020.3 currently shipped by Fedora:
 # https://bugzilla.redhat.com/show_bug.cgi?id=2036372
-Provides:	bundled(tbb) = 2021.5
+Provides:	bundled(tbb) = 2021.7
 
 %description
 mold is a faster drop-in replacement for existing Unix linkers.
@@ -110,6 +110,7 @@ fi
 %changelog
 * Thu Mar 16 2023 Christoph Erhardt <fedora@sicherha.de> - 1.11.0-1
 - Bump version to 1.11.0
+- Update version number of bundled tbb package to 2021.7
 
 * Sat Jan 21 2023 Christoph Erhardt <fedora@sicherha.de> - 1.10.0-1
 - Bump version to 1.10.0
