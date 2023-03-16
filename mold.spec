@@ -4,7 +4,7 @@
 %endif
 
 Name:		mold
-Version:	1.10.0
+Version:	1.11.0
 Release:	1%{?dist}
 Summary:	A Modern Linker
 
@@ -21,9 +21,6 @@ Patch0:		tbb-strip-werror.patch
 
 # Allow building against the system-provided `xxhash.h`
 Patch1:		0001-Use-system-compatible-include-path-for-xxhash.h.patch
-
-# Fix out-of-bounds memory access (https://github.com/rui314/mold/issues/969)
-Patch2:		0002-Fix-out-of-bound-memory-access.patch
 
 # mold currently cannot produce native binaries for MIPS
 ExcludeArch:	%{mips}
@@ -111,6 +108,9 @@ fi
 %{_mandir}/man1/mold.1*
 
 %changelog
+* Thu Mar 16 2023 Christoph Erhardt <fedora@sicherha.de> - 1.11.0-1
+- Bump version to 1.11.0
+
 * Sat Jan 21 2023 Christoph Erhardt <fedora@sicherha.de> - 1.10.0-1
 - Bump version to 1.10.0
 - Refresh patch
