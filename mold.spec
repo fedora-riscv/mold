@@ -28,6 +28,11 @@ Patch2:		0002-Fix-unit-tests-on-i686-host.patch
 # Fix ifunc on ppc64le (https://github.com/rui314/mold/issues/1142)
 Patch3:		0003-POWER10-Emit-dynamic-relocation-for-ifunc.patch
 
+# Newer Fedora releases currently do not provide blake3-devel on i686
+%if 0%{?fedora} >= 39
+ExcludeArch:	%{ix86}
+%endif
+
 BuildRequires:	blake3-devel
 BuildRequires:	cmake
 %if 0%{?el8}
