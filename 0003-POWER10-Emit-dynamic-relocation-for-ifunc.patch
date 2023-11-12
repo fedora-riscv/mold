@@ -1,0 +1,35 @@
+From c2fe89d18d235915fb60d2e1dcfe3fc5936e6cdc Mon Sep 17 00:00:00 2001
+Message-ID: <c2fe89d18d235915fb60d2e1dcfe3fc5936e6cdc.1699294468.git.github@sicherha.de>
+In-Reply-To: <9c6dfb6623d7a05ab7e51620aacf1e4be16cf157.1699294468.git.github@sicherha.de>
+References: <9c6dfb6623d7a05ab7e51620aacf1e4be16cf157.1699294468.git.github@sicherha.de>
+From: Rui Ueyama <ruiu@cs.stanford.edu>
+Date: Mon, 6 Nov 2023 13:25:27 +0900
+Subject: [PATCH 3/3] [POWER10] Emit dynamic relocation for ifunc
+
+Previously, we didn't emit a dynamic relocation for a statically-
+initialized function pointer pointing to an ifunc on POWER10, e.g.
+
+  int fn() __attribute__((ifunc("resolve_fn")));
+  void *ptr = fn;
+
+Fixes https://github.com/rui314/mold/issues/1142
+---
+ elf/input-sections.cc | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/elf/input-sections.cc b/elf/input-sections.cc
+index 864e72bb..70187ef3 100644
+--- a/elf/input-sections.cc
++++ b/elf/input-sections.cc
+@@ -274,7 +274,7 @@ static Action get_absrel_action(Context<E> &ctx, Symbol<E> &sym) {
+ template <typename E>
+ static Action get_dyn_absrel_action(Context<E> &ctx, Symbol<E> &sym) {
+   if (sym.is_ifunc())
+-    return ctx.arg.pic ? IFUNC_DYNREL : NONE;
++    return sym.is_pde_ifunc(ctx) ? NONE : IFUNC_DYNREL;
+ 
+   // This is a decision table for absolute relocations for the pointer
+   // size data (e.g. R_X86_64_64). Unlike the absrel_table, we can emit
+-- 
+2.41.0
+
