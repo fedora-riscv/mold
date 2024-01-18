@@ -49,7 +49,9 @@ BuildRequires:	gdb
 BuildRequires:	glibc-static
 %if ! 0%{?el8}
 %ifarch x86_64
-BuildRequires:	/usr/lib/libc.so
+# Koji 64-bit buildroots do not contain packages from 32-bit builds, therefore
+# the 'glibc-devel.i686' variant is provided as 'glibc32'.
+BuildRequires: (glibc32 or glibc-devel(%__isa_name-32))
 %endif
 BuildRequires:	libdwarf-tools
 %endif
