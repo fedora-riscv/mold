@@ -12,15 +12,8 @@ License:	MIT AND (Apache-2.0 OR MIT)
 URL:		https://github.com/rui314/mold
 Source0:	%{url}/archive/v%{version}/%{name}-%{version}.tar.gz
 
-# The bundled build system for tbb tries to strip all Werror from the
-# CFLAGS/CXXFLAGS when not building in strict mode (mold doesn't use strict
-# mode). We don't want that because it causes the "Werror=format-security"
-# option to become "=format-security" and break the build. (similar to a patch
-# in the Fedora tbb package)
-Patch0:		tbb-strip-werror.patch
-
 # Allow building against the system-provided `xxhash.h`
-Patch1:		0001-Use-system-compatible-include-path-for-xxhash.h.patch
+Patch0:		0001-Use-system-compatible-include-path-for-xxhash.h.patch
 
 # Newer Fedora releases currently do not provide blake3-devel on i686
 %if 0%{?fedora} >= 39
@@ -115,6 +108,7 @@ fi
 %changelog
 * Sun Jan 21 2024 Christoph Erhardt <fedora@sicherha.de> - 2.4.0-2
 - Don't build-require files outside of permitted directories
+- Drop upstreamed tbb patch
 * Sun Dec 03 2023 Christoph Erhardt <fedora@sicherha.de> - 2.4.0-1
 - Bump version to 2.4.0 (rhbz#2252444)
 
