@@ -15,6 +15,12 @@ Source0:	%{url}/archive/v%{version}/%{name}-%{version}.tar.gz
 # Allow building against the system-provided `xxhash.h`
 Patch0:		0001-Use-system-compatible-include-path-for-xxhash.h.patch
 
+# https://github.com/rui314/mold/pull/1176
+Patch1:		0002-ELF-S390X-Skip-tests-that-still-fail-with-GCC-14.patch
+
+# Possibly https://sourceware.org/bugzilla/show_bug.cgi?id=29655
+Patch2:		0003-ELF-S390X-Skip-another-test-that-fails-with-GCC-14.patch
+
 # Newer Fedora releases currently do not provide blake3-devel on i686
 %if 0%{?fedora} >= 39
 ExcludeArch:	%{ix86}
@@ -120,6 +126,8 @@ fi
 - Drop upstreamed tbb patch
 - Build against system-provided tbb where available
 - Update version number of bundled tbb package to 2021.10
+- Skip broken unit tests on s390x
+
 * Sun Dec 03 2023 Christoph Erhardt <fedora@sicherha.de> - 2.4.0-1
 - Bump version to 2.4.0 (rhbz#2252444)
 

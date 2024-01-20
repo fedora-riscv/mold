@@ -1,0 +1,30 @@
+From 8c438dd4bb8a02df7a036b272633af1348bebf38 Mon Sep 17 00:00:00 2001
+Message-ID: <8c438dd4bb8a02df7a036b272633af1348bebf38.1705791489.git.github@sicherha.de>
+In-Reply-To: <6af0d5eea300dbac42801b5debd1412f7394e27a.1705791489.git.github@sicherha.de>
+References: <6af0d5eea300dbac42801b5debd1412f7394e27a.1705791489.git.github@sicherha.de>
+From: Christoph Erhardt <github@sicherha.de>
+Date: Sat, 20 Jan 2024 23:58:00 +0100
+Subject: [PATCH 3/3] [ELF][S390X] Skip another test that fails with GCC 14
+
+---
+ test/elf/rodata-name.sh | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/test/elf/rodata-name.sh b/test/elf/rodata-name.sh
+index def5a6fd..f5de4b4a 100755
+--- a/test/elf/rodata-name.sh
++++ b/test/elf/rodata-name.sh
+@@ -5,6 +5,10 @@
+ # Concretely speaking, ARM as uses "@" as a start of a comment.
+ [ $MACHINE = arm ] && skip
+ 
++# GCC produces buggy code for this test case on s390x.
++# https://sourceware.org/bugzilla/show_bug.cgi?id=29655
++[ $MACHINE = s390x ] && $CC -v 2>&1 | grep -E '^gcc version 14\.' && skip
++
+ cat <<'EOF' | $CC -c -o $t/a.o -x assembler -
+ .globl val1, val2, val3, val4, val5
+ 
+-- 
+2.43.0
+
