@@ -5,7 +5,7 @@
 
 Name:		mold
 Version:	2.4.0
-Release:	1%{?dist}
+Release:	2%{?dist}
 Summary:	A Modern Linker
 
 License:	MIT AND (Apache-2.0 OR MIT)
@@ -113,6 +113,8 @@ fi
 %{_mandir}/man1/mold.1*
 
 %changelog
+* Sun Jan 21 2024 Christoph Erhardt <fedora@sicherha.de> - 2.4.0-2
+- Don't build-require files outside of permitted directories
 * Sun Dec 03 2023 Christoph Erhardt <fedora@sicherha.de> - 2.4.0-1
 - Bump version to 2.4.0 (rhbz#2252444)
 
