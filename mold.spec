@@ -33,8 +33,15 @@ BuildRequires:	mimalloc-devel
 BuildRequires:	xxhash-static
 BuildRequires:	zlib-devel
 
+%if 0%{?fedora} >= 40
+BuildRequires:	tbb-devel >= 2021.9
+%else
+# API-incompatible with older tbb 2020.3 shipped by Fedora < 40:
+# https://bugzilla.redhat.com/show_bug.cgi?id=2036372
+Provides:	bundled(tbb) = 2021.10
 # Required by bundled oneTBB
 BuildRequires:	hwloc-devel
+%endif
 
 # The following packages are only required for executing the tests
 BuildRequires:	clang
@@ -54,10 +61,6 @@ BuildRequires:	llvm
 Requires(post): %{_sbindir}/alternatives
 Requires(preun): %{_sbindir}/alternatives
 
-# API-incompatible with older tbb 2020.3 currently shipped by Fedora:
-# https://bugzilla.redhat.com/show_bug.cgi?id=2036372
-Provides:	bundled(tbb) = 2021.9
-
 %description
 mold is a faster drop-in replacement for existing Unix linkers.
 It is several times faster than the LLVM lld linker.
@@ -67,12 +70,18 @@ build time, especially in rapid debug-edit-rebuild cycles.
 %prep
 %autosetup -p1
 rm -r third-party/{blake3,mimalloc,xxhash,zlib,zstd}
+%if 0%{?fedora} >= 40
+rm -r third-party/tbb
+%endif
 
 %build
 %if 0%{?el8}
 . /opt/rh/gcc-toolset-12/enable
 %endif
-%cmake -DMOLD_USE_SYSTEM_MIMALLOC=ON
+%if 0%{?fedora} >= 40
+%define tbb_flags -DMOLD_USE_SYSTEM_TBB=ON
+%endif
+%cmake -DMOLD_USE_SYSTEM_MIMALLOC=ON %{?tbb_flags}
 %cmake_build
 
 %install
@@ -109,6 +118,8 @@ fi
 * Sun Jan 21 2024 Christoph Erhardt <fedora@sicherha.de> - 2.4.0-2
 - Don't build-require files outside of permitted directories
 - Drop upstreamed tbb patch
+- Build against system-provided tbb where available
+- Update version number of bundled tbb package to 2021.10
 * Sun Dec 03 2023 Christoph Erhardt <fedora@sicherha.de> - 2.4.0-1
 - Bump version to 2.4.0 (rhbz#2252444)
 
