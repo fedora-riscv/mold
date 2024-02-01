@@ -1,0 +1,43 @@
+From 23bb02f522a41edbf405501bb06a9dfd583ce311 Mon Sep 17 00:00:00 2001
+Message-ID: <23bb02f522a41edbf405501bb06a9dfd583ce311.1705791489.git.github@sicherha.de>
+In-Reply-To: <6af0d5eea300dbac42801b5debd1412f7394e27a.1705791489.git.github@sicherha.de>
+References: <6af0d5eea300dbac42801b5debd1412f7394e27a.1705791489.git.github@sicherha.de>
+From: Christoph Erhardt <github@sicherha.de>
+Date: Thu, 18 Jan 2024 21:49:00 +0100
+Subject: [PATCH 2/3] [ELF][S390X] Skip tests that still fail with GCC 14
+
+Signed-off-by: Christoph Erhardt <github@sicherha.de>
+---
+ test/elf/bno-symbolic.sh  | 2 +-
+ test/elf/canonical-plt.sh | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/test/elf/bno-symbolic.sh b/test/elf/bno-symbolic.sh
+index e577bc08..213a1cc8 100755
+--- a/test/elf/bno-symbolic.sh
++++ b/test/elf/bno-symbolic.sh
+@@ -3,7 +3,7 @@
+ 
+ # GCC produces buggy code for this test case on s390x.
+ # https://sourceware.org/bugzilla/show_bug.cgi?id=29655
+-[ $MACHINE = s390x ] && $CC -v 2>&1 | grep -E '^gcc version 1[0-3]\.' && skip
++[ $MACHINE = s390x ] && $CC -v 2>&1 | grep -E '^gcc version 1[0-4]\.' && skip
+ 
+ cat <<EOF | $CC -c -fPIC -o$t/a.o -xc -
+ int foo = 4;
+diff --git a/test/elf/canonical-plt.sh b/test/elf/canonical-plt.sh
+index b736411f..53188e0e 100755
+--- a/test/elf/canonical-plt.sh
++++ b/test/elf/canonical-plt.sh
+@@ -3,7 +3,7 @@
+ 
+ # GCC produces buggy code for this test case on s390x.
+ # https://sourceware.org/bugzilla/show_bug.cgi?id=29655
+-[ $MACHINE = s390x ] && $CC -v 2>&1 | grep -E '^gcc version 1[0-3]\.' && skip
++[ $MACHINE = s390x ] && $CC -v 2>&1 | grep -E '^gcc version 1[0-4]\.' && skip
+ 
+ cat <<EOF | $CC -o $t/a.so -fPIC -shared -xc -
+ void *foo() {
+-- 
+2.43.0
+
